@@ -1,7 +1,9 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
+const cors = require("cors");
+
 const app = express();
 
-app.use(express.json());
 const db = {
   users: [
     {
@@ -21,7 +23,22 @@ const db = {
       joined: new Date(),
     },
   ],
+  login: [
+    {
+      id: "987",
+      hash: "",
+      email: "johann@gmail.com",
+    },
+    {
+      id: "988",
+      hash: "",
+      email: "sara@gmail.com",
+    },
+  ],
 };
+
+app.use(express.json());
+app.use(cors());
 
 /*
 THE PLAN
@@ -44,6 +61,21 @@ app.post("/signin", (req, res) => {
     We want to check whatever the user enters on the front-end – it's going to come back here in the response or in the request and we want to check it with our current list of users to make sure that their passwords match.
 
     */
+  // Load hash from your password DB.
+  bcrypt.compare(
+    "qwerty",
+    "$2a$10$GFlnWh5BZuQKYQNmiX86der7D3M0x3Od/h8TRJ2HYxu0MvivZTRqm",
+    function (err, res) {
+      console.log("first guess", res);
+    }
+  );
+  bcrypt.compare(
+    "not_bacon",
+    "$2a$10$GFlnWh5BZuQKYQNmiX86der7D3M0x3Od/h8TRJ2HYxu0MvivZTRqm",
+    function (err, res) {
+      console.log("second guess", res);
+    }
+  );
 
   if (
     req.body.email === db.users[0].email &&
@@ -57,6 +89,12 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hash) {
+      // Store hash in your password DB.
+      console.log(hash);
+    });
+  });
   db.users.push({
     id: "125",
     name: name,
