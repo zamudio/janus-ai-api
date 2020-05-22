@@ -25,11 +25,17 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signin", signin.handleSignin(db, bcrypt));
-app.post("/register", register.handleRegister(db, bcrypt));
+app.post("/register", (req, res) => {
+  register.handleRegister(db, bcrypt);
+});
 // future build out on front end -- user profile
-app.get("/profile/:id", profile.handleProfileGet(db));
+app.get("/profile/:id", (req, res) => {
+  profile.handleProfileGet(db);
+});
 // updates entry count for user
-app.put("/image", image.handleImage(db));
+app.put("/image", (req, res) => {
+  image.handleImage(db);
+});
 
 app.post("/imageurl", (req, res) => {
   image.handleApiCall(req, res);
