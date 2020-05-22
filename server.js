@@ -8,6 +8,7 @@ const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
 
+// Do NOT use this if production app, kills ssl
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 const db = knex({
